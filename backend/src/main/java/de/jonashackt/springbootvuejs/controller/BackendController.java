@@ -6,9 +6,13 @@ import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 @Controller
 @RequestMapping("/api")
@@ -18,14 +22,18 @@ public class BackendController {
 
     public static final String HELLO_TEXT = "Hello from Spring Boot Backend!";
     public static final String SECURED_TEXT = "Hello from the secured resource!";
+    public static final String LOGIN_USER_ID = "kubeflow-userid";
 
     @Autowired
     private UserRepository userRepository;
 
     @ResponseBody
     @RequestMapping(path = "/hello")
-    public String sayHello() {
+    public String sayHello(HttpServletRequest request) {
         LOG.info("GET called on /hello resource");
+        String userId = request.getHeader(LOGIN_USER_ID);
+        LOG.info("GET user id:{}", userId);
+        printHeaders(request);
         return HELLO_TEXT;
     }
 
@@ -55,5 +63,14 @@ public class BackendController {
     public String getSecured() {
         LOG.info("GET successfully called on /secured resource");
         return SECURED_TEXT;
+    }
+
+
+    private void printHeaders(HttpServletRequest request) {
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while(headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            LOG.info("Header Name - {}, Value - {}",headerName , request.getHeader(headerName));
+        }
     }
 }
