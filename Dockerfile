@@ -1,18 +1,5 @@
 # Docker multi-stage build
 
-# 1. Building the App with Maven
-#FROM maven:3-jdk-11
-
-#ADD . /springbootvuejs
-#WORKDIR /springbootvuejs
-
-# Just echo so we can see, if everything is there :)
-#RUN ls -l
-
-# Run Maven build
-#RUN mvn clean install -DskipTests
-
-
 # Just using the build artifact and then removing the build-container
 FROM openjdk:17-jdk
 

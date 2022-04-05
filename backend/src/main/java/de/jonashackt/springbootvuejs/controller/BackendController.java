@@ -2,11 +2,11 @@ package de.jonashackt.springbootvuejs.controller;
 
 import de.jonashackt.springbootvuejs.domain.User;
 import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
+import de.jonashackt.springbootvuejs.feignClient.NotebookClient;
 import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +27,9 @@ public class BackendController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private NotebookClient notebookClient;
+
     @ResponseBody
     @RequestMapping(path = "/hello")
     public String sayHello(HttpServletRequest request) {
@@ -34,6 +37,9 @@ public class BackendController {
         String userId = request.getHeader(LOGIN_USER_ID);
         LOG.info("GET user id:{}", userId);
         printHeaders(request);
+
+        Object notebooks = notebookClient.getUserNotebooks();
+        LOG.info("Get note book:{}", notebooks);
         return HELLO_TEXT;
     }
 
