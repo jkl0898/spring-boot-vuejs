@@ -1,5 +1,6 @@
 package de.jonashackt.springbootvuejs.feignClient;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -7,5 +8,5 @@ import org.springframework.web.bind.annotation.GetMapping;
 public interface NotebookClient {
 
     @GetMapping(value = "/jupyter/api/namespaces/xieyao/notebooks")
-    Object getUserNotebooks();
+    JSON getUserNotebooks();
 }
