@@ -1,6 +1,5 @@
 package de.jonashackt.springbootvuejs.controller;
 
-import com.alibaba.fastjson.JSON;
 import de.jonashackt.springbootvuejs.domain.User;
 import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
 import de.jonashackt.springbootvuejs.feignClient.NotebookClient;
@@ -39,9 +38,16 @@ public class BackendController {
         LOG.info("GET user id:{}", userId);
         printHeaders(request);
 
-        JSON notebooks = notebookClient.getUserNotebooks();
+        Object notebooks = notebookClient.getUserNotebooks();
         LOG.info("Get note book:{}", notebooks);
         return HELLO_TEXT;
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/hi")
+    public String sayHi() {
+        LOG.info("GET called on /hi resource");
+        return "hi";
     }
 
     @ResponseBody

@@ -49,6 +49,30 @@ public class DefaultConfiguration {
 //        return new FeignErrorDecoder();
 //    }
 
+
+//    @Bean
+//    public Decoder feignDecoder() {
+//        return new ResponseEntityDecoder(new SpringDecoder(feignHttpMessageConverter()));
+//    }
+//
+//    public ObjectFactory<HttpMessageConverters> feignHttpMessageConverter() {
+//        final HttpMessageConverters httpMessageConverters = new HttpMessageConverters(new PhpMappingJackson2HttpMessageConverter());
+//        return new ObjectFactory<HttpMessageConverters>() {
+//            @Override
+//            public HttpMessageConverters getObject() throws BeansException {
+//                return httpMessageConverters;
+//            }
+//        };
+//    }
+//
+//    public class PhpMappingJackson2HttpMessageConverter extends MappingJackson2HttpMessageConverter {
+//        PhpMappingJackson2HttpMessageConverter(){
+//            List<MediaType> mediaTypes = new ArrayList<>();
+//            mediaTypes.add(MediaType.valueOf(MediaType.TEXT_HTML_VALUE + ";charset=UTF-8")); //关键
+//            setSupportedMediaTypes(mediaTypes);
+//        }
+//    }
+
     @Bean
     public Decoder feignDecoder() {
         HttpMessageConverter fastJsonConverter = createFastJsonConverter();
