@@ -1,6 +1,7 @@
 package de.jonashackt.springbootvuejs.feignClient;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,5 +18,5 @@ public interface NotebookClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/namespaces/{namespace}/notebooks")
     JSON createNotebooks(@PathVariable("namespace") String namespace,
-                         @RequestBody String noteBookInfo);
+                         @RequestBody JSONObject noteBookInfo);
 }
