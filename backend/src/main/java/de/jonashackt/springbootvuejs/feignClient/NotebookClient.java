@@ -15,7 +15,7 @@ public interface NotebookClient {
     @GetMapping(value = "/api/namespaces/xieyao/notebooks")
     JSON getUserNotebooks();
 
-    @RequestMapping(method = RequestMethod.POST, value = "/jupyter/api/namespaces/{namespace}/notebooks")
+    @RequestMapping(method = RequestMethod.POST, value = "/api/namespaces/{namespace}/notebooks")
     JSON createNotebooks(@PathVariable("namespace") String namespace,
                          @RequestBody String noteBookInfo);
 }
