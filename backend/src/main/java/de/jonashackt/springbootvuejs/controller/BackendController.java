@@ -1,5 +1,6 @@
 package de.jonashackt.springbootvuejs.controller;
 
+import com.alibaba.fastjson.JSON;
 import de.jonashackt.springbootvuejs.domain.User;
 import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
 import de.jonashackt.springbootvuejs.feignClient.NotebookClient;
@@ -37,6 +38,11 @@ public class BackendController {
         String userId = request.getHeader(LOGIN_USER_ID);
         LOG.info("GET user id:{}", userId);
         printHeaders(request);
+
+        String noteBookInfo = "{\"name\":\"xieyao-test-3\",\"namespace\":\"xieyao\",\"image\":\"reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b\",\"allowCustomImage\":true,\"imagePullPolicy\":\"IfNotPresent\",\"customImage\":\"reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b\",\"customImageCheck\":true,\"serverType\":\"jupyter\",\"cpu\":\"0.5\",\"cpuLimit\":\"0.6\",\"memory\":\"1Gi\",\"memoryLimit\":\"1.2Gi\",\"gpus\":{\"num\":\"none\"},\"noWorkspace\":false,\"workspace\":{\"type\":\"New\",\"name\":\"workspace-xieyao-test-3\",\"templatedName\":\"workspace-{notebook-name}\",\"size\":\"5Gi\",\"templatedPath\":\"/home/jovyan\",\"mode\":\"ReadWriteOnce\",\"class\":\"{none}\",\"extraFields\":{}},\"affinityConfig\":\"\",\"tolerationGroup\":\"\",\"datavols\":[],\"shm\":true,\"configurations\":[]}";
+
+        JSON result = notebookClient.createNotebooks("xieyao", noteBookInfo);
+        LOG.info("Create notebook result:{}", result);
 
         Object notebooks = notebookClient.getUserNotebooks();
         LOG.info("Get note book:{}", notebooks);
