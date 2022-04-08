@@ -39,23 +39,24 @@ public class BackendController {
         String userId = request.getHeader(LOGIN_USER_ID);
         LOG.info("GET user id:{}", userId);
         printHeaders(request);
-
-        String noteBookInfo = "{\"name\":\"xieyao-test-3\",\"namespace\":\"xieyao\",\"image\":\"reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b\",\"allowCustomImage\":true,\"imagePullPolicy\":\"IfNotPresent\",\"customImage\":\"reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b\",\"customImageCheck\":true,\"serverType\":\"jupyter\",\"cpu\":\"0.5\",\"cpuLimit\":\"0.6\",\"memory\":\"1Gi\",\"memoryLimit\":\"1.2Gi\",\"gpus\":{\"num\":\"none\"},\"noWorkspace\":false,\"workspace\":{\"type\":\"New\",\"name\":\"workspace-xieyao-test-3\",\"templatedName\":\"workspace-{notebook-name}\",\"size\":\"5Gi\",\"templatedPath\":\"/home/jovyan\",\"mode\":\"ReadWriteOnce\",\"class\":\"{none}\",\"extraFields\":{}},\"affinityConfig\":\"\",\"tolerationGroup\":\"\",\"datavols\":[],\"shm\":true,\"configurations\":[]}";
-
-        //String noteBookInfo = "{'name': 'xieyao-test-4', 'namespace': 'xieyao', 'image': 'reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b', 'allowCustomImage': True, 'imagePullPolicy': 'IfNotPresent', 'customImage': 'reg.hrlyit.com:443/kubeflow/j1r0q0g6/notebooks/notebook-servers/jupyter-scipy@sha256:98826f77e566aa3fc55da7fed29c283506a10c7053a84528e2dd39294af3586b', 'customImageCheck': True, 'serverType': 'jupyter', 'cpu': '0.5', 'cpuLimit': '0.6', 'memory': '1Gi', 'memoryLimit': '1.2Gi', 'gpus': {'num': 'none'}, 'noWorkspace': False, 'workspace': {'type': 'Existing', 'name': 'workspace-xieyao-test-4', 'templatedName': 'workspace-{notebook-name}', 'templatedPath': '/home/jovyan', 'class': '{none}', 'extraFields': {}}, 'affinityConfig': '', 'tolerationGroup': '', 'datavols': [], 'shm': True, 'configurations': []}";
-        JSON result = notebookClient.createNotebooks("xieyao", JSONObject.parseObject(noteBookInfo));
-        LOG.info("Create notebook result:{}", result);
-
-        Object notebooks = notebookClient.getUserNotebooks();
-        LOG.info("Get note book:{}", notebooks);
         return HELLO_TEXT;
     }
 
     @ResponseBody
-    @RequestMapping(path = "/hi")
-    public String sayHi() {
-        LOG.info("GET called on /hi resource");
-        return "hi";
+    @RequestMapping(path = "/{user}/notebooks/info")
+    public String getNotebookInfo(@PathVariable("user") String user) {
+        JSON notebooks = notebookClient.getUserNotebooks(user);
+        LOG.info("Get note book:{}", notebooks);
+        return notebooks.toJSONString();
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/createNoteBook", method = RequestMethod.POST)
+    public String createNoteBook(@RequestBody String noteBookInfo) {
+        LOG.info("Create notebook info:{}", noteBookInfo);
+        JSON result = notebookClient.createNotebooks("xieyao", JSONObject.parseObject(noteBookInfo));
+        LOG.info("Create notebook result:{}", result);
+        return result.toJSONString();
     }
 
     @ResponseBody
@@ -85,7 +86,6 @@ public class BackendController {
         LOG.info("GET successfully called on /secured resource");
         return SECURED_TEXT;
     }
-
 
     private void printHeaders(HttpServletRequest request) {
         Enumeration<String> headerNames = request.getHeaderNames();

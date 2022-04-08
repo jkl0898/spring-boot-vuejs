@@ -3,7 +3,7 @@ import axios, {AxiosResponse} from 'axios'
 const axiosApi = axios.create({
     baseURL: `/sp/api`,
     timeout: 1000,
-    headers: { 'Content-Type': 'application/json' }
+    headers: {'Content-Type': 'application/json'}
 });
 
 interface User {
@@ -13,6 +13,15 @@ interface User {
 }
 
 export default {
+    createNoteBook(notebookinfo: string): Promise<AxiosResponse<string>> {
+        return axiosApi.post(`/createNoteBook`, notebookinfo);
+    },
+    getNoteBookInfo(namespace: string): Promise<AxiosResponse<string>> {
+        return axiosApi.get(`/` + namespace + `/notebooks/info`);
+    },
+    hi(): Promise<AxiosResponse<string>> {
+        return axiosApi.get(`/hi`);
+    },
     hello(): Promise<AxiosResponse<string>> {
         return axiosApi.get(`/hello`);
     },
@@ -23,11 +32,12 @@ export default {
         return axiosApi.post(`/user/` + firstName + '/' + lastName);
     },
     getSecured(user: string, password: string): Promise<AxiosResponse<string>> {
-        return axiosApi.get(`/secured/`,{
+        return axiosApi.get(`/secured/`, {
             auth: {
                 username: user,
                 password: password
-            }});
+            }
+        });
     }
 }
 
