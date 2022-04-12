@@ -4,7 +4,8 @@
     <h2>REST service call results</h2>
 
     <button @click="callHelloApi()">CALL Spring Boot REST backend service</button>
-
+    <h4>Backend response: {{ backendResponse }}</h4>
+    <button @click="callJupyterListApi()">CALL Jupyter Notebook</button>
     <h4>Backend response: {{ backendResponse }}</h4>
 
   </div>
@@ -41,6 +42,15 @@ export default defineComponent({
       .catch((error: AxiosError) => {
         this.errors.push(error)
       })
+    },
+    callJupyterListApi () {
+        api.jupyterList().then(response => {
+            this.backendResponse = response.data;
+            console.log(response.data)
+        })
+            .catch((error: AxiosError) => {
+                this.errors.push(error)
+            })
     }
   }
 });

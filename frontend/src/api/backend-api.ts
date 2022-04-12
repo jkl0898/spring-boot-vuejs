@@ -6,6 +6,13 @@ const axiosApi = axios.create({
     headers: {'Content-Type': 'application/json'}
 });
 
+const jupyterApi = axios.create({
+    baseURL: `/jupyter/api`,
+    timeout: 1000,
+    headers: {'Content-Type': 'application/json'}
+});
+
+
 interface User {
     id: number;
     firstName: string;
@@ -38,6 +45,9 @@ export default {
                 password: password
             }
         });
+    },
+    jupyterList(): Promise<AxiosResponse<string>> {
+        return jupyterApi.get(`/namespaces/xieyao/notebooks`);
     }
 }
 
