@@ -42,9 +42,10 @@ public class BackendController {
         return HELLO_TEXT;
     }
 
+
     @ResponseBody
     @RequestMapping(path = "/{user}/notebooks/info")
-    public String getNotebookInfo(@PathVariable("user") String user) {
+    public String getNotebooList(@PathVariable("user") String user) {
         JSON notebooks = notebookClient.getUserNotebooks(user);
         LOG.info("Get note book:{}", notebooks);
         return notebooks.toJSONString();
@@ -57,6 +58,16 @@ public class BackendController {
         JSON result = notebookClient.createNotebooks("xieyao", JSONObject.parseObject(noteBookInfo));
         LOG.info("Create notebook result:{}", result);
         return result.toJSONString();
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/namespaces/{namespace}/notebooks/{notebook}", method = RequestMethod.DELETE)
+    public JSON deleteNoteBook(@PathVariable("namespace") String namespace,
+                                 @PathVariable("notebook") String notebook) {
+        LOG.info("Delete notebook info, namespace:{}, notebook:{}", namespace, notebook);
+        JSON result = notebookClient.deleteNoteBook(namespace, notebook);
+        LOG.info("Delete notebook result:{}", result);
+        return result;
     }
 
     @ResponseBody

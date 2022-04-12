@@ -18,4 +18,7 @@ public interface NotebookClient {
     @RequestMapping(method = RequestMethod.POST, value = "/api/namespaces/{namespace}/notebooks")
     JSON createNotebooks(@PathVariable("namespace") String namespace,
                          @RequestBody JSONObject noteBookInfo);
+
+    @RequestMapping(method = RequestMethod.DELETE, value = "/api/namespaces/{namespace}/notebooks/{notebook}")
+    JSON deleteNoteBook(@PathVariable("namespace") String namespace, @PathVariable("notebook") String notebook);
 }
