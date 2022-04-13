@@ -14,12 +14,20 @@
         <button @click="createNoteBook()">Create NoteBook</button>
         <h4>Create Response: {{ cResponse }}</h4>
 
-
         <h1></h1>
         <input type="text" v-model="user.namespace" placeholder="user namespace">
         <button @click="getNoteBookInfo()">Get NoteBookInfo</button>
         <h4>Get Response: {{ gResponse }}</h4>
 
+        <h1></h1>
+        <input type="text" v-model="user.workspaceInfo" placeholder="create workspace">
+        <button @click="createWorkspace()">Create Workspace</button>
+        <h4>Create Workspace Response: {{ wResponse }}</h4>
+
+        <h1></h1>
+        <input type="text" v-model="user.workspaceName" placeholder="delete workspace">
+        <button @click="deleteWorkspace()">Delete Workspace</button>
+        <h4>Delete Workspace Response: {{ wResponse }}</h4>
 
         <div v-if="showResponse"><h6>User created with Id: {{ user.id }}</h6></div>
 
@@ -40,7 +48,9 @@
             firstName: string,
             lastName: string,
             notebookinfo: string,
-            namespace: string;
+            namespace: string,
+            workspaceInfo: string,
+            workspaceName: string;
         };
         retrievedUser: {
             id: number
@@ -51,7 +61,8 @@
         showRetrievedUser: boolean;
         errors: AxiosError[];
         cResponse: string;
-        gResponse: string
+        gResponse: string;
+        wResponse: string;
     }
 
     export default defineComponent({
@@ -65,7 +76,9 @@
                     firstName: '',
                     lastName: '',
                     notebookinfo: '',
-                    namespace: ''
+                    namespace: '',
+                    workspaceInfo: '',
+                    workspaceName: ''
                 },
                 showResponse: false,
                 retrievedUser: {
@@ -75,7 +88,8 @@
                 },
                 showRetrievedUser: false,
                 cResponse: '',
-                gResponse: ''
+                gResponse: '',
+                wResponse: ''
             }
         },
         methods: {
@@ -109,6 +123,25 @@
                         this.errors.push(e)
                     })
             },
+            createWorkspace() {
+                api.createWorkspace(this.user.workspaceInfo).then(response => {
+                    this.wResponse = response.data
+                    console.log('Created workspace. ' + response.data);
+                })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
+            },
+            deleteWorkspace() {
+                api.deleteWorkspace(this.user.workspaceName).then(response => {
+                    this.wResponse = response.data
+                    console.log('Deleted workspace. ' + response.data);
+                })
+                    .catch(e => {
+                        this.errors.push(e)
+                    })
+            },
+
             getNoteBookInfo() {
                 api.getNoteBookInfo(this.user.namespace).then(response => {
                     this.gResponse = response.data

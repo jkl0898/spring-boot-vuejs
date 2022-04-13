@@ -20,6 +20,12 @@ interface User {
 }
 
 export default {
+    createWorkspace(workspaceInfo: string): Promise<AxiosResponse<string>> {
+        return axiosApi.post(`/profiles`, workspaceInfo);
+    },
+    deleteWorkspace(workspaceName: string): Promise<AxiosResponse<string>> {
+        return axiosApi.delete(`/profiles` + `/` + workspaceName);
+    },
     createNoteBook(notebookinfo: string): Promise<AxiosResponse<string>> {
         return axiosApi.post(`/createNoteBook`, notebookinfo);
     },

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import de.jonashackt.springbootvuejs.domain.User;
 import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
+import de.jonashackt.springbootvuejs.feignClient.KubeflowProfileClient;
 import de.jonashackt.springbootvuejs.feignClient.NotebookClient;
 import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
@@ -32,6 +33,28 @@ public class BackendController {
     @Autowired
     private NotebookClient notebookClient;
 
+    @Autowired
+    private KubeflowProfileClient kubeflowProfileClient;
+
+
+    @ResponseBody
+    @RequestMapping(path = "/profiles", method = RequestMethod.POST)
+    public String createProfile(@RequestBody String workspaceInfo) {
+        LOG.info("GET workspace info:{}", workspaceInfo);
+        JSON result = kubeflowProfileClient.createKubeflowProfile(JSONObject.parseObject(workspaceInfo));
+        LOG.info("Create workspace result:{}", result);
+        return result.toJSONString();
+    }
+
+    @ResponseBody
+    @RequestMapping(path = "/profiles/{workspace}", method = RequestMethod.DELETE)
+    public String deleteProfile(@PathVariable("workspace") String workspace) {
+        LOG.info("GET workspace name:{}", workspace);
+        JSON result = kubeflowProfileClient.deleteKubeflowProfile(workspace);
+        LOG.info("Delete workspace result:{}", result);
+        return result.toJSONString();
+    }
+
     @ResponseBody
     @RequestMapping(path = "/hello")
     public String sayHello(HttpServletRequest request) {
@@ -42,10 +65,9 @@ public class BackendController {
         return HELLO_TEXT;
     }
 
-
     @ResponseBody
     @RequestMapping(path = "/{user}/notebooks/info")
-    public String getNotebooList(@PathVariable("user") String user) {
+    public String getNotebookList(@PathVariable("user") String user) {
         JSON notebooks = notebookClient.getUserNotebooks(user);
         LOG.info("Get note book:{}", notebooks);
         return notebooks.toJSONString();
