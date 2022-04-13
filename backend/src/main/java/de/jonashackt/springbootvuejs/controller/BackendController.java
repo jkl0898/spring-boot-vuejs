@@ -41,18 +41,28 @@ public class BackendController {
     @RequestMapping(path = "/profiles", method = RequestMethod.POST)
     public String createProfile(@RequestBody String workspaceInfo) {
         LOG.info("GET workspace info:{}", workspaceInfo);
-        JSON result = kubeflowProfileClient.createKubeflowProfile(JSONObject.parseObject(workspaceInfo));
-        LOG.info("Create workspace result:{}", result);
-        return result.toJSONString();
+        String result = "success";
+        try {
+            kubeflowProfileClient.createKubeflowProfile(JSONObject.parseObject(workspaceInfo));
+        } catch (Exception e) {
+            result = "failed";
+            LOG.error("Failed to create profile.", e);
+        }
+        return result;
     }
 
     @ResponseBody
     @RequestMapping(path = "/profiles/{workspace}", method = RequestMethod.DELETE)
     public String deleteProfile(@PathVariable("workspace") String workspace) {
         LOG.info("GET workspace name:{}", workspace);
-        JSON result = kubeflowProfileClient.deleteKubeflowProfile(workspace);
-        LOG.info("Delete workspace result:{}", result);
-        return result.toJSONString();
+        String result = "success";
+        try {
+            kubeflowProfileClient.deleteKubeflowProfile(workspace);
+        } catch (Exception e) {
+            result = "failed";
+            LOG.error("Failed to delete profile.", e);
+        }
+        return result;
     }
 
     @ResponseBody

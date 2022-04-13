@@ -19,8 +19,8 @@ public interface KubeflowProfileClient {
     JSON getKubeflowProfile();
 
     @PostMapping(value = "/profiles")
-    JSON createKubeflowProfile(@RequestBody JSONObject profileInfo);
+    void createKubeflowProfile(@RequestBody JSONObject profileInfo) throws Exception;
 
     @DeleteMapping(value = "/profiles/{namespace}")
-    JSON deleteKubeflowProfile(@PathVariable("namespace") String namespace);
+    void deleteKubeflowProfile(@PathVariable("namespace") String namespace) throws Exception;
 }
