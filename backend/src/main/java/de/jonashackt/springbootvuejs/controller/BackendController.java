@@ -4,13 +4,14 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import de.jonashackt.springbootvuejs.domain.User;
 import de.jonashackt.springbootvuejs.exception.UserNotFoundException;
-import de.jonashackt.springbootvuejs.feignClient.KubeflowProfileClient;
+import de.jonashackt.springbootvuejs.feignClient.KbProfileClient;
 import de.jonashackt.springbootvuejs.feignClient.NotebookClient;
 import de.jonashackt.springbootvuejs.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,13 +20,14 @@ import java.util.Enumeration;
 
 @Controller
 @RequestMapping("/api")
+@EnableAsync
 public class BackendController {
 
     private static final Logger LOG = LoggerFactory.getLogger(BackendController.class);
 
-    public static final String HELLO_TEXT = "Hello from Spring Boot Backend!";
-    public static final String SECURED_TEXT = "Hello from the secured resource!";
-    public static final String LOGIN_USER_ID = "kubeflow-userid";
+    static final String HELLO_TEXT = "Hello from Spring Boot Backend!";
+    static final String SECURED_TEXT = "Hello from the secured resource!";
+    private static final String LOGIN_USER_ID = "kubeflow-userid";
 
     @Autowired
     private UserRepository userRepository;
@@ -34,20 +36,20 @@ public class BackendController {
     private NotebookClient notebookClient;
 
     @Autowired
-    private KubeflowProfileClient kubeflowProfileClient;
-
+    private KbProfileClient kbProfileClient;
 
     @ResponseBody
     @RequestMapping(path = "/profiles", method = RequestMethod.POST)
     public String createProfile(@RequestBody String workspaceInfo) {
-        LOG.info("GET workspace info:{}", workspaceInfo);
+        LOG.info("GET workspace info:{}, thread name:{}", workspaceInfo, Thread.currentThread().getName());
         String result = "success";
         try {
-            kubeflowProfileClient.createKubeflowProfile(JSONObject.parseObject(workspaceInfo));
+            kbProfileClient.createProfile(JSONObject.parseObject(workspaceInfo));
         } catch (Exception e) {
             result = "failed";
             LOG.error("Failed to create profile.", e);
         }
+        LOG.info("FINISH create workspace. thread name:{}", Thread.currentThread().getName());
         return result;
     }
 
@@ -57,7 +59,7 @@ public class BackendController {
         LOG.info("GET workspace name:{}", workspace);
         String result = "success";
         try {
-            kubeflowProfileClient.deleteKubeflowProfile(workspace);
+            kbProfileClient.deleteProfile(workspace);
         } catch (Exception e) {
             result = "failed";
             LOG.error("Failed to delete profile.", e);
