@@ -33,7 +33,7 @@ public class BackendControllerTest {
 	@Test
 	public void saysHello() {
 		when()
-			.get("/sp/api/hello")
+			.get("/api/hello")
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()
@@ -49,7 +49,7 @@ public class BackendControllerTest {
                 .pathParam("firstName", "Norbert")
                 .pathParam("lastName", "Siegmund")
             .when()
-                .post("/sp/api/user/{lastName}/{firstName}")
+                .post("/api/user/{lastName}/{firstName}")
             .then()
                 .statusCode(is(HttpStatus.SC_CREATED))
                 .extract()
@@ -59,7 +59,7 @@ public class BackendControllerTest {
             given()
                     .pathParam("id", userId)
                 .when()
-                    .get("/sp/api/user/{id}")
+                    .get("/api/user/{id}")
                 .then()
                     .statusCode(HttpStatus.SC_OK)
                     .assertThat()
@@ -76,7 +76,7 @@ public class BackendControllerTest {
 		given()
 			.pathParam("id", someId)
 		.when()
-			.get("/sp/api/user/{id}")
+			.get("/api/user/{id}")
 		.then()
 			.statusCode(HttpStatus.SC_NOT_FOUND);
 	}
@@ -84,11 +84,11 @@ public class BackendControllerTest {
 	@Test
 	public void secured_api_should_react_with_unauthorized_per_default() {
 
-//		given()
-//		.when()
-//			.get("/sp/api/secured")
-//		.then()
-//			.statusCode(HttpStatus.SC_UNAUTHORIZED);
+		given()
+		.when()
+			.get("/api/secured")
+		.then()
+			.statusCode(HttpStatus.SC_UNAUTHORIZED);
 	}
 
 	@Test
@@ -97,7 +97,7 @@ public class BackendControllerTest {
 		given()
 			.auth().basic("sina", "miller")
 		.when()
-			.get("/sp/api/secured")
+			.get("/api/secured")
 		.then()
 			.statusCode(HttpStatus.SC_OK)
 			.assertThat()

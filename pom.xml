@@ -23,21 +23,7 @@
 
 		<!-- Analysis Tools for CI -->
 		<build-plugin.jacoco.version>0.8.7</build-plugin.jacoco.version>
-		<spring-cloud.version>2021.0.1</spring-cloud.version>
     </properties>
-
-	<dependencyManagement>
-		<dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-dependencies</artifactId>
-			<version>${spring-cloud.version}</version>
-			<type>pom</type>
-			<scope>import</scope>
-		</dependency>
-		</dependencies>
-
-	</dependencyManagement>
 	
 	<modules>
         <module>frontend</module>
@@ -72,20 +58,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-        <repositories>
-		<repository>
-			<id>aliyun</id>
-			<name>aliyunrepository</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 </project>
